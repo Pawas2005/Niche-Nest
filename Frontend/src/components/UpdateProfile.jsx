@@ -6,7 +6,7 @@ import {
   updateProfile,
 } from "../Store/slices/updateProfileSlice";
 import { toast } from "react-toastify";
-import { getUser } from "../store/slices/userSlice";
+import { getUser } from "../Store/slices/userSlice";
 
 const UpdateProfile = () => {
   const { user } = useSelector((state) => state.user);

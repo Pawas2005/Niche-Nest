@@ -5,7 +5,7 @@ import {
   clearAllUpdateProfileErrors,
   updatePassword,
 } from "../Store/slices/updateProfileSlice";
-import { getUser } from "../store/slices/userSlice";
+import { getUser } from "../Store/slices/userSlice";
 import { FaRegEyeSlash, FaEye } from "react-icons/fa";
 import {toast} from "react-toastify"
 
