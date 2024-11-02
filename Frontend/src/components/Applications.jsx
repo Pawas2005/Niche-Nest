@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 const Applications = () => {
   const { applications, loading, error, message } = useSelector(
-    (state) => state.appslications
+    (state) => state.applications
   );
 
   const dispatch = useDispatch();
