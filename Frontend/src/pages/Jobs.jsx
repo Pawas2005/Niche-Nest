@@ -19,7 +19,6 @@ const Jobs = () => {
     setCity(city);
     setSelectedCity(city);
   };
-
   const handleNicheChange = (niche) => {
     setNiche(niche);
     setSelectedNiche(niche);
@@ -33,7 +32,11 @@ const Jobs = () => {
       dispatch(clearAllJobErrors());
     }
     dispatch(fetchJobs(city, niche, searchKeyword));
-  }, [dispatch, error, city, niche, searchKeyword]);
+  }, [dispatch, error, city, niche]);
+
+  const handleSearch = () => {
+    dispatch(fetchJobs(city, niche, searchKeyword));
+  };
 
   const cities = [
     "Mumbai",
@@ -85,20 +88,6 @@ const Jobs = () => {
     "IT Consulting",
   ];
 
-  // Filter jobs based on city, niche, and search keyword
-  const filteredJobs = jobs.filter((job) => {
-    const matchCity = selectedCity
-      ? job.location.toLowerCase().includes(selectedCity.toLowerCase())
-      : true;
-    const matchNiche = selectedNiche
-      ? job.niche.toLowerCase().includes(selectedNiche.toLowerCase())
-      : true;
-    const matchSearchKeyword = job.title
-      .toLowerCase()
-      .includes(searchKeyword.toLowerCase());
-    return matchCity && matchNiche && matchSearchKeyword;
-  });
-
   return (
     <>
       {loading ? (
@@ -108,21 +97,12 @@ const Jobs = () => {
           <div className="search-tab-wrapper">
             <input
               type="text"
-              placeholder="Search jobs..."
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              className="search-input"
-              style={{
-                padding: "10px",
-                margin: "10px 0",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                width: "100%",
-              }}
             />
+            <button onClick={handleSearch}>Find Job</button>
             <FaSearch />
           </div>
-
           <div className="wrapper">
             <div className="filter-bar">
               <div className="cities">
@@ -141,7 +121,6 @@ const Jobs = () => {
                   </div>
                 ))}
               </div>
-
               <div className="cities">
                 <h2>Filter Job By Niche</h2>
                 {nichesArray.map((niche, index) => (
@@ -159,7 +138,6 @@ const Jobs = () => {
                 ))}
               </div>
             </div>
-
             <div className="container">
               <div className="mobile-filter">
                 <select value={city} onChange={(e) => setCity(e.target.value)}>
@@ -182,42 +160,39 @@ const Jobs = () => {
                   ))}
                 </select>
               </div>
-
               <div className="jobs_container">
-                {filteredJobs.length > 0 ? (
-                  filteredJobs.map((job) => (
-                    <div className="card" key={job._id}>
-                      <p
-                        className={
-                          job.hiringMultipleCandidates === "Yes"
-                            ? "hiring-multiple"
-                            : "hiring"
-                        }
-                      >
-                        {job.hiringMultipleCandidates === "Yes"
-                          ? "Hiring Multiple Candidates"
-                          : "Hiring"}
-                      </p>
-                      <p className="title">{job.title}</p>
-                      <p className="company">{job.companyName}</p>
-                      <p className="location">{job.location}</p>
-                      <p className="salary">
-                        <span>Salary:</span> Rs. {job.salary}
-                      </p>
-                      <p className="posted">
-                        <span>Posted On:</span>{" "}
-                        {job.jobPostedOn.substring(0, 10)}
-                      </p>
-                      <div className="btn-wrapper">
-                        <Link className="btn" to={`/post/application/${job._id}`}>
-                          Apply Now
-                        </Link>
+                {jobs &&
+                  jobs.map((element) => {
+                    return (
+                      <div className="card" key={element._id}>
+                        {element.hiringMultipleCandidates === "Yes" ? (
+                          <p className="hiring-multiple">
+                            Hiring Multiple Candidates
+                          </p>
+                        ) : (
+                          <p className="hiring">Hiring</p>
+                        )}
+                        <p className="title">{element.title}</p>
+                        <p className="company">{element.companyName}</p>
+                        <p className="location">{element.location}</p>
+                        <p className="salary">
+                          <span>Salary:</span> Rs. {element.salary}
+                        </p>
+                        <p className="posted">
+                          <span>Posted On:</span>{" "}
+                          {element.jobPostedOn.substring(0, 10)}
+                        </p>
+                        <div className="btn-wrapper">
+                          <Link
+                            className="btn"
+                            to={`/post/application/${element._id}`}
+                          >
+                            Apply Now
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No jobs found.</p>
-                )}
+                    );
+                  })}
               </div>
             </div>
           </div>
