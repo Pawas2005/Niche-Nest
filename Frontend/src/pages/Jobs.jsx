@@ -15,15 +15,6 @@ const Jobs = () => {
 
   const { jobs, loading, error } = useSelector((state) => state.jobs);
 
-  const handleCityChange = (city) => {
-    setCity(city);
-    setSelectedCity(city);
-  };
-  const handleNicheChange = (niche) => {
-    setNiche(niche);
-    setSelectedNiche(niche);
-  };
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,12 +22,23 @@ const Jobs = () => {
       toast.error(error);
       dispatch(clearAllJobErrors());
     }
-    dispatch(fetchJobs(city, niche,searchKeyword));
-  }, [dispatch, error, city, niche,searchKeyword]);
+    dispatch(fetchJobs(city, niche, searchKeyword));
+  }, [dispatch, error, city, niche, searchKeyword]);
+
+  const handleCityChange = (city) => {
+    setCity(city);
+    setSelectedCity(city);
+  };
+  
+  const handleNicheChange = (niche) => {
+    setNiche(niche);
+    setSelectedNiche(niche);
+  };
 
   const handleSearch = () => {
-    dispatch(fetchJobs(city, niche));
+    dispatch(fetchJobs(city, niche, searchKeyword)); // Fetch jobs with all filters
   };
+
   const filteredJobs = jobs.filter((job) => {
     const matchCity = selectedCity
       ? job.location.toLowerCase().includes(selectedCity.toLowerCase())
@@ -51,53 +53,19 @@ const Jobs = () => {
   });
 
   const cities = [
-    "Mumbai",
-    "Pune",
-    "Delhi",
-    "Bengaluru",
-    "kolkata",
-    "Chennai",
-    "Patna",
-    "Hyderabad",
-    "Chandigarh",
-    "Gurgaon",
-    "Noida",
-    "Ahmedabad",
-    "Trivandrum",
-    "Lucknow",
-    "Mysore",
-    "Coimbatore",
-    "Indore",
-    "Bhopal",
-    "Nagpur",
-    "Jaipur",
-    "Bhubaneswar",
-    "Vijaywada",
-    "Kochi",
-    "Visakhapatnam",
+    "Mumbai", "Pune", "Delhi", "Bengaluru", "Kolkata", "Chennai", "Patna",
+    "Hyderabad", "Chandigarh", "Gurgaon", "Noida", "Ahmedabad", "Trivandrum", 
+    "Lucknow", "Mysore", "Coimbatore", "Indore", "Bhopal", "Nagpur", "Jaipur", 
+    "Bhubaneswar", "Vijayawada", "Kochi", "Visakhapatnam"
   ];
 
   const nichesArray = [
-    "Software Development",
-    "Web Development",
-    "Cybersecurity",
-    "Data Science",
-    "Artificial Intelligence",
-    "Cloud Computing",
-    "DevOps",
-    "Mobile App Development",
-    "Blockchain",
-    "Database Administration",
-    "Network Administration",
-    "UI/UX Design",
-    "Game Development",
-    "IoT (Internet of Things)",
-    "Big Data",
-    "Machine Learning",
-    "IT Project Management",
-    "IT Support and Helpdesk",
-    "Systems Administration",
-    "IT Consulting",
+    "Software Development", "Web Development", "Cybersecurity", "Data Science", 
+    "Artificial Intelligence", "Cloud Computing", "DevOps", "Mobile App Development", 
+    "Blockchain", "Database Administration", "Network Administration", "UI/UX Design", 
+    "Game Development", "IoT (Internet of Things)", "Big Data", "Machine Learning", 
+    "IT Project Management", "IT Support and Helpdesk", "Systems Administration", 
+    "IT Consulting"
   ];
 
   return (
@@ -107,7 +75,7 @@ const Jobs = () => {
       ) : (
         <section className="jobs">
           <div className="search-tab-wrapper">
-          <input
+            <input
               type="text"
               placeholder="Search jobs..."
               value={searchKeyword}
@@ -121,8 +89,9 @@ const Jobs = () => {
                 width: "100%",
               }}
             />
-            <FaSearch />
+            <FaSearch onClick={handleSearch} />
           </div>
+
           <div className="wrapper">
             <div className="filter-bar">
               <div className="cities">
@@ -141,6 +110,7 @@ const Jobs = () => {
                   </div>
                 ))}
               </div>
+
               <div className="jobs_container">
                 {filteredJobs.length > 0 ? (
                   filteredJobs.map((job) => (
@@ -163,14 +133,10 @@ const Jobs = () => {
                         <span>Salary:</span> Rs. {job.salary}
                       </p>
                       <p className="posted">
-                        <span>Posted On:</span>{" "}
-                        {job.jobPostedOn.substring(0, 10)}
+                        <span>Posted On:</span> {job.jobPostedOn.substring(0, 10)}
                       </p>
                       <div className="btn-wrapper">
-                        <Link
-                          className="btn"
-                          to={`/post/application/${job._id}`}
-                        >
+                        <Link className="btn" to={`/post/application/${job._id}`}>
                           Apply Now
                         </Link>
                       </div>
@@ -180,7 +146,8 @@ const Jobs = () => {
                   <p>No jobs found.</p>
                 )}
               </div>
-              <div className="cities">
+
+              <div className="niches">
                 <h2>Filter Job By Niche</h2>
                 {nichesArray.map((niche, index) => (
                   <div key={index}>
@@ -197,6 +164,7 @@ const Jobs = () => {
                 ))}
               </div>
             </div>
+
             <div className="container">
               <div className="mobile-filter">
                 <select value={city} onChange={(e) => setCity(e.target.value)}>
@@ -207,10 +175,8 @@ const Jobs = () => {
                     </option>
                   ))}
                 </select>
-                <select
-                  value={niche}
-                  onChange={(e) => setNiche(e.target.value)}
-                >
+
+                <select value={niche} onChange={(e) => setNiche(e.target.value)}>
                   <option value="">Filter By Niche</option>
                   {nichesArray.map((niche, index) => (
                     <option value={niche} key={index}>
@@ -219,39 +185,33 @@ const Jobs = () => {
                   ))}
                 </select>
               </div>
+
               <div className="jobs_container">
-                {jobs &&
-                  jobs.map((element) => {
-                    return (
-                      <div className="card" key={element._id}>
-                        {element.hiringMultipleCandidates === "Yes" ? (
-                          <p className="hiring-multiple">
-                            Hiring Multiple Candidates
-                          </p>
-                        ) : (
-                          <p className="hiring">Hiring</p>
-                        )}
-                        <p className="title">{element.title}</p>
-                        <p className="company">{element.companyName}</p>
-                        <p className="location">{element.location}</p>
-                        <p className="salary">
-                          <span>Salary:</span> Rs. {element.salary}
-                        </p>
-                        <p className="posted">
-                          <span>Posted On:</span>{" "}
-                          {element.jobPostedOn.substring(0, 10)}
-                        </p>
-                        <div className="btn-wrapper">
-                          <Link
-                            className="btn"
-                            to={`/post/application/${element._id}`}
-                          >
-                            Apply Now
-                          </Link>
-                        </div>
+                {filteredJobs.length > 0 ? (
+                  filteredJobs.map((element) => (
+                    <div className="card" key={element._id}>
+                      <p className={element.hiringMultipleCandidates === "Yes" ? "hiring-multiple" : "hiring"}>
+                        {element.hiringMultipleCandidates === "Yes" ? "Hiring Multiple Candidates" : "Hiring"}
+                      </p>
+                      <p className="title">{element.title}</p>
+                      <p className="company">{element.companyName}</p>
+                      <p className="location">{element.location}</p>
+                      <p className="salary">
+                        <span>Salary:</span> Rs. {element.salary}
+                      </p>
+                      <p className="posted">
+                        <span>Posted On:</span> {element.jobPostedOn.substring(0, 10)}
+                      </p>
+                      <div className="btn-wrapper">
+                        <Link className="btn" to={`/post/application/${element._id}`}>
+                          Apply Now
+                        </Link>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))
+                ) : (
+                  <p>No jobs found.</p>
+                )}
               </div>
             </div>
           </div>
