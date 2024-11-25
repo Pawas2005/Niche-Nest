@@ -113,7 +113,7 @@ const Jobs = () => {
               type="text"
               placeholder="Search jobs..."
               value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
+              onClick={(e) => setSearchKeyword(e.target.value)}
               className="search-input"
               
             />
