@@ -104,16 +104,14 @@ const Jobs = () => {
 
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
+       (
         <section className="jobs">
           <div className="search-tab-wrapper">
             <input
               type="text"
               placeholder="Search jobs..."
               value={searchKeyword}
-              onClick={(e) => setSearchKeyword(e.target.value)}
+              onChange={(e) => setSearchKeyword(e.target.value)}
               className="search-input"
               
             />
