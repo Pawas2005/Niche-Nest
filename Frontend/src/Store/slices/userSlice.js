@@ -1,16 +1,16 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const userSlice = createSlice({
   name: "user",
-  initialState:{
+  initialState: {
     loading: false,
     isAuthenticated: false,
     user: {},
     error: null,
     message: null,
   },
-  reducers:{
+  reducers: {
     registerRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
@@ -88,16 +88,20 @@ const userSlice = createSlice({
   },
 });
 
-export const register = (data) => async(dispatch)=>{
+export const register = (data) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
-  try{
-    const response = await axios.post("http://localhost:4000/api/v1/user/register", data, {
-      withCredentials: true,
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  try {
+    const response = await axios.post(
+      "https://niche-nest-qwkk.onrender.com/api/v1/user/register",
+      data,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
     dispatch(userSlice.actions.registerSuccess(response.data));
     dispatch(userSlice.actions.clearAllErrors());
-  }catch(error){
+  } catch (error) {
     dispatch(userSlice.actions.registerFailed(error.response.data.message));
   }
 };
@@ -106,7 +110,7 @@ export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
     const response = await axios.post(
-      "http://localhost:4000/api/v1/user/login",
+      "https://niche-nest-qwkk.onrender.com/api/v1/user/login",
       data,
       {
         withCredentials: true,
@@ -124,7 +128,7 @@ export const getUser = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchUserRequest());
   try {
     const response = await axios.get(
-      "http://localhost:4000/api/v1/user/getuser",
+      "https://niche-nest-qwkk.onrender.com/api/v1/user/getuser",
       {
         withCredentials: true,
       }
@@ -139,7 +143,7 @@ export const getUser = () => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     const response = await axios.get(
-      "http://localhost:4000/api/v1/user/logout",
+      "https://niche-nest-qwkk.onrender.com/api/v1/user/logout",
       {
         withCredentials: true,
       }
