@@ -97,7 +97,7 @@ const Jobs = () => {
         <Spinner />
       ) : (
         <section className="jobs">
-          <div className="search-tab-wrapper">
+          {/* <div className="search-tab-wrapper">
           <input
                 type="text"
                 placeholder="Search jobs..."
@@ -116,6 +116,7 @@ const Jobs = () => {
           </div>
           <div className="wrapper">
             <div className="filter-bar">
+              
               <div className="cities">
                 <h2>Filter Job By City</h2>
                 {cities.map((city, index) => (
@@ -204,6 +205,95 @@ const Jobs = () => {
                       </div>
                     );
                   })}
+              </div>
+            </div>
+          </div>
+           */}
+
+
+          <div className="search-tab-wrapper">
+            <div>
+              <input
+                type="text"
+                placeholder="Search jobs..."
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                className="search-input"
+                style={{
+                  padding: "10px",
+                  margin: "10px 0",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  width: "100%",
+                }}
+              />
+              <FaSearch />
+            </div>
+
+            <div className="wrapper">
+              <div className="filter-bar">
+                <div className="cities">
+                  <h2>Filter Job By City</h2>
+                  {cities.map((city, index) => (
+                    <div key={index}>
+                      <input
+                        type="radio"
+                        id={city}
+                        name="city"
+                        value={city}
+                        checked={selectedCity === city}
+                        onChange={() => handleCityChange(city)}
+                      />
+                      <label htmlFor={city}>{city}</label>
+                    </div>
+                  ))}
+                </div>
+                <div className="cities">
+                  <h2>Filter Job By Niche</h2>
+                  {nichesArray.map((niche, index) => (
+                    <div key={index}>
+                      <input
+                        type="radio"
+                        id={niche}
+                        name="niche"
+                        value={niche}
+                        checked={selectedNiche === niche}
+                        onChange={() => handleNicheChange(niche)}
+                      />
+                      <label htmlFor={niche}>{niche}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="container">
+                <div className="jobs_container">
+                  {filteredJobs.length > 0 ? (
+                    filteredJobs.map((job) => (
+                      <div className="card" key={job._id}>
+                        <p className={job.hiringMultipleCandidates === "Yes" ? "hiring-multiple" : "hiring"}>
+                          {job.hiringMultipleCandidates === "Yes" ? "Hiring Multiple Candidates" : "Hiring"}
+                        </p>
+                        <p className="title">{job.title}</p>
+                        <p className="company">{job.companyName}</p>
+                        <p className="location">{job.location}</p>
+                        <p className="salary">
+                          <span>Salary:</span> Rs. {job.salary}
+                        </p>
+                        <p className="posted">
+                          <span>Posted On:</span> {job.jobPostedOn.substring(0, 10)}
+                        </p>
+                        <div className="btn-wrapper">
+                          <Link className="btn" to={`/post/application/${job._id}`}>
+                            Apply Now
+                          </Link>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No jobs found.</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
