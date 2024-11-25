@@ -186,33 +186,8 @@ const Jobs = () => {
                 </select>
               </div>
 
-              <div className="jobs_container">
-                {filteredJobs.length > 0 ? (
-                  filteredJobs.map((element) => (
-                    <div className="card" key={element._id}>
-                      <p className={element.hiringMultipleCandidates === "Yes" ? "hiring-multiple" : "hiring"}>
-                        {element.hiringMultipleCandidates === "Yes" ? "Hiring Multiple Candidates" : "Hiring"}
-                      </p>
-                      <p className="title">{element.title}</p>
-                      <p className="company">{element.companyName}</p>
-                      <p className="location">{element.location}</p>
-                      <p className="salary">
-                        <span>Salary:</span> Rs. {element.salary}
-                      </p>
-                      <p className="posted">
-                        <span>Posted On:</span> {element.jobPostedOn.substring(0, 10)}
-                      </p>
-                      <div className="btn-wrapper">
-                        <Link className="btn" to={`/post/application/${element._id}`}>
-                          Apply Now
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No jobs found.</p>
-                )}
-              </div>
+              
+             
             </div>
           </div>
         </section>
