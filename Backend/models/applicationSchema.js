@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import validator from "validator";
-
 const applicationSchema = new mongoose.Schema({
   jobSeekerInfo: {
     id: {
@@ -58,17 +57,17 @@ const applicationSchema = new mongoose.Schema({
     jobTitle: {
       type: String,
       required: true,
-    }
+    },
   },
-  deletedBy:{
+  deletedBy: {
     jobSeeker: {
       type: Boolean,
       default: false,
     },
-    employer:{
+    employer: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 });
 

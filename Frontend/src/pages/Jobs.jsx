@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 const Jobs = () => {
   const [city, setCity] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
@@ -36,7 +37,7 @@ const Jobs = () => {
 
   const handleSearch = () => {
     dispatch(fetchJobs(city, niche, searchKeyword));
-  };
+  };  
 
   const cities = [
     "Mumbai",
