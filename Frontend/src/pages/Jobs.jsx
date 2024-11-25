@@ -115,13 +115,7 @@ const Jobs = () => {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               className="search-input"
-              style={{
-                padding: "10px",
-                margin: "10px 0",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                width: "100%",
-              }}
+              
             />
             <FaSearch onClick={filteredJobs} />
           </div>
