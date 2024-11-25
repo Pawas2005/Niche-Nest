@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import validator from "validator";
-const bcrypt = require('bcryptjs');
+import bcrypt from "bcryptjs";
+// const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
