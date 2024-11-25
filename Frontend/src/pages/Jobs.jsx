@@ -15,6 +15,15 @@ const Jobs = () => {
 
   const { jobs, loading, error } = useSelector((state) => state.jobs);
 
+  const handleCityChange = (city) => {
+    setCity(city);
+    setSelectedCity(city);
+  };
+  const handleNicheChange = (niche) => {
+    setNiche(niche);
+    setSelectedNiche(niche);
+  };
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,28 +32,21 @@ const Jobs = () => {
       dispatch(clearAllJobErrors());
     }
     dispatch(fetchJobs(city, niche, searchKeyword));
-  }, [dispatch, error, city, niche, searchKeyword]);
+  }, [dispatch, error, city, niche]);
 
-  const handleCityChange = (city) => {
-    setCity(city);
-    setSelectedCity(city);
-  };
-
-  const handleNicheChange = (niche) => {
-    setNiche(niche);
-    setSelectedNiche(niche);
-  };
-
-  const handleSearch = () => {
-    dispatch(fetchJobs(selectedCity, selectedNiche, searchKeyword));
-  };
+  const handleSearch = jobs.filter((job) => {
+    const matchCity = selectedCity ? job.location.toLowerCase().includes(selectedCity.toLowerCase()) : true;
+    const matchNiche = selectedNiche ? job.niche.toLowerCase().includes(selectedNiche.toLowerCase()) : true;
+    const matchSearchKeyword = job.title.toLowerCase().includes(searchKeyword.toLowerCase());
+    return matchCity && matchNiche && matchSearchKeyword;
+  });
 
   const cities = [
     "Mumbai",
     "Pune",
     "Delhi",
     "Bengaluru",
-    "Kolkata",
+    "kolkata",
     "Chennai",
     "Patna",
     "Hyderabad",
@@ -95,10 +97,8 @@ const Jobs = () => {
         <Spinner />
       ) : (
         <section className="jobs">
-          {/* Search and Filters */}
           <div className="search-tab-wrapper">
-            <div>
-              <input
+          <input
                 type="text"
                 placeholder="Search jobs..."
                 value={searchKeyword}
@@ -112,13 +112,8 @@ const Jobs = () => {
                   width: "100%",
                 }}
               />
-              <button onClick={handleSearch} className="search-button">
-                <FaSearch />
-              </button>
-            </div>
+              <FaSearch />
           </div>
-
-          {/* Filter Options */}
           <div className="wrapper">
             <div className="filter-bar">
               <div className="cities">
@@ -137,7 +132,7 @@ const Jobs = () => {
                   </div>
                 ))}
               </div>
-              <div className="niches">
+              <div className="cities">
                 <h2>Filter Job By Niche</h2>
                 {nichesArray.map((niche, index) => (
                   <div key={index}>
@@ -154,8 +149,6 @@ const Jobs = () => {
                 ))}
               </div>
             </div>
-
-            {/* Job Listings */}
             <div className="container">
               <div className="mobile-filter">
                 <select value={city} onChange={(e) => setCity(e.target.value)}>
@@ -178,42 +171,39 @@ const Jobs = () => {
                   ))}
                 </select>
               </div>
-
-              {/* Jobs Container */}
               <div className="jobs_container">
-                {jobs && jobs.length > 0 ? (
-                  jobs.map((job) => (
-                    <div className="card" key={job._id}>
-                      {job.hiringMultipleCandidates === "Yes" ? (
-                        <p className="hiring-multiple">
-                          Hiring Multiple Candidates
+                {jobs &&
+                  jobs.map((element) => {
+                    return (
+                      <div className="card" key={element._id}>
+                        {element.hiringMultipleCandidates === "Yes" ? (
+                          <p className="hiring-multiple">
+                            Hiring Multiple Candidates
+                          </p>
+                        ) : (
+                          <p className="hiring">Hiring</p>
+                        )}
+                        <p className="title">{element.title}</p>
+                        <p className="company">{element.companyName}</p>
+                        <p className="location">{element.location}</p>
+                        <p className="salary">
+                          <span>Salary:</span> Rs. {element.salary}
                         </p>
-                      ) : (
-                        <p className="hiring">Hiring</p>
-                      )}
-                      <p className="title">{job.title}</p>
-                      <p className="company">{job.companyName}</p>
-                      <p className="location">{job.location}</p>
-                      <p className="salary">
-                        <span>Salary:</span> Rs. {job.salary}
-                      </p>
-                      <p className="posted">
-                        <span>Posted On:</span>{" "}
-                        {job.jobPostedOn.substring(0, 10)}
-                      </p>
-                      <div className="btn-wrapper">
-                        <Link
-                          className="btn"
-                          to={`/post/application/${job._id}`}
-                        >
-                          Apply Now
-                        </Link>
+                        <p className="posted">
+                          <span>Posted On:</span>{" "}
+                          {element.jobPostedOn.substring(0, 10)}
+                        </p>
+                        <div className="btn-wrapper">
+                          <Link
+                            className="btn"
+                            to={`/post/application/${element._id}`}
+                          >
+                            Apply Now
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No jobs found.</p>
-                )}
+                    );
+                  })}
               </div>
             </div>
           </div>
